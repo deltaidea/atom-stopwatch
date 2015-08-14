@@ -1,4 +1,4 @@
-getCurrentTask = require "./getCurrentTask"
+getCurrentLap = require "./getCurrentLap"
 timeRemaining = require "./timeRemaining"
 timeToText = require "./timeToText"
 
@@ -16,9 +16,9 @@ updateStatusBar = ->
 			if not stopwatch.shouldAddToStatusBar
 				continue
 
-			task = getCurrentTask stopwatch
-			if task
-				textList.push "#{task.text} - #{timeToText ( timeRemaining task ), yes}"
+			lap = getCurrentLap stopwatch
+			if lap
+				textList.push "#{lap.text} - #{timeToText ( timeRemaining lap ), yes}"
 
 	statusBarElement.textContent = textList.join ", "
 

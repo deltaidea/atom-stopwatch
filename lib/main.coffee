@@ -1,12 +1,12 @@
 addStatusBarTile = require "./addStatusBarTile"
 onChange = require "./onChange"
-updateHighlightedTasks = require "./updateHighlightedTasks"
+updateHighlightedLaps = require "./updateHighlightedLaps"
 updateStatusBar = require "./updateStatusBar"
 
 module.exports = AtomStopwatch =
 	activate: ->
 		setInterval updateStatusBar, 2000
-		setInterval updateHighlightedTasks, 2000
+		setInterval updateHighlightedLaps, 2000
 
 		atom.workspace.observeTextEditors ( editor ) ->
 			editor.onDidStopChanging onChange editor

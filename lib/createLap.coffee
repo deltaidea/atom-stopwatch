@@ -1,14 +1,14 @@
 getEndingTime = require "./getEndingTime"
 hourMinuteToTime = require "./hourMinuteToTime"
 
-module.exports = createTask = ( stopwatch, match = [], row ) ->
+module.exports = createLap = ( stopwatch, match = [], row ) ->
 	parsedHour = match[ 1 ]
 	parsedMinute = match[ 2 ]
 	parsedText = match[ 3 ] ? ""
 	parsedDurationHour = match[ 5 ] ? 0
 	parsedDurationMinute = match[ 7 ] ? 0
 
-	if stopwatch?.tasks?.length
+	if stopwatch?.laps?.length
 		startTime = getEndingTime stopwatch
 	else
 		startTime = hourMinuteToTime parsedHour, parsedMinute

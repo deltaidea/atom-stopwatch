@@ -1,15 +1,15 @@
 timeToText = require "./timeToText"
 
-module.exports = taskToText = ( task, returnAsParts = no ) ->
+module.exports = lapToText = ( lap, returnAsParts = no ) ->
 	parts =
 		prefix: "  * "
-		startTime: "#{timeToText task.startTime}"
+		startTime: "#{timeToText lap.startTime}"
 		startTimeDelimiter: " "
-		text: "#{task.text}"
+		text: "#{lap.text}"
 		duration: ""
 
-	if task.duration
-		parts.duration = timeToText task.duration, yes
+	if lap.duration
+		parts.duration = timeToText lap.duration, yes
 
 	if returnAsParts
 		parts

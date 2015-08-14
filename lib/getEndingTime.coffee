@@ -1,9 +1,9 @@
-module.exports = getEndingTime = ( stopwatchOrTask ) ->
-	if stopwatchOrTask.tasks
-		task = stopwatchOrTask.tasks[ stopwatchOrTask.tasks.length - 1 ]
+module.exports = getEndingTime = ( stopwatchOrLap ) ->
+	if stopwatchOrLap.laps
+		lap = stopwatchOrLap.laps[ stopwatchOrLap.laps.length - 1 ]
 	else
-		task = stopwatchOrTask
+		lap = stopwatchOrLap
 	timeZoneOffset = +new Date 1970, 0, 1
-	result = new Date ( +task.startTime ) + ( +task.duration ) - timeZoneOffset
+	result = new Date ( +lap.startTime ) + ( +lap.duration ) - timeZoneOffset
 	result.setDate 1
 	result

@@ -1,13 +1,13 @@
 getEndingTime = require "./getEndingTime"
 hourMinuteToTime = require "./hourMinuteToTime"
 
-module.exports = isCurrentTask = ( task ) ->
+module.exports = isCurrentLap = ( lap ) ->
 	currentTime = hourMinuteToTime()
-	startTime = task.startTime
-	endingTime = getEndingTime task
+	startTime = lap.startTime
+	endingTime = getEndingTime lap
 
 	if endingTime > startTime
 		startTime <= currentTime < endingTime
 	else
-		# Task duration surrounds midnight.
+		# Lap duration surrounds midnight.
 		startTime <= currentTime or currentTime < endingTime

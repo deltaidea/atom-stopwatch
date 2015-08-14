@@ -1,5 +1,5 @@
 module.exports = cleanHighlight = ( stopwatch ) ->
-	for task in stopwatch.tasks
-		if task.highlightMarker
-			task.highlightMarker.destroy()
-			task.highlightMarker = null
+	for lap in stopwatch.laps
+		if lap.highlightMarker
+			lap.highlightMarker.destroy()
+			lap.highlightMarker = null

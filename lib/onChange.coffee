@@ -1,15 +1,15 @@
 { Range } = require "atom"
-createTask = require "./createTask"
+createLap = require "./createLap"
 decorateStopwatchHeader = require "./decorateStopwatchHeader"
-decorateTaskText = require "./decorateTaskText"
-getCurrentTask = require "./getCurrentTask"
-highlightTask = require "./highlightTask"
-taskToText = require "./taskToText"
-updateHighlightedTasks = require "./updateHighlightedTasks"
+decorateLapText = require "./decorateLapText"
+getCurrentLap = require "./getCurrentLap"
+highlightLap = require "./highlightLap"
+lapToText = require "./lapToText"
+updateHighlightedLaps = require "./updateHighlightedLaps"
 updateStatusBar = require "./updateStatusBar"
 
 # ["  * 21:02 foo 10 hours 30 minutes", "21", "02", "foo", " 10 hours", "10", " 30 minutes", "30"]
-taskRegexp = /^  \* (\d\d):(\d\d) (.*?)( (\d{1,2}) hours?)?( (\d{1,2}) minutes?)?$/i
+lapRegexp = /^  \* (\d\d):(\d\d) (.*?)( (\d{1,2}) hours?)?( (\d{1,2}) minutes?)?$/i
 
 module.exports = onChange = ( editor ) -> ->
 	editor.stopwatches = []
@@ -49,7 +49,7 @@ module.exports = onChange = ( editor ) -> ->
 				editor: editor
 				title: headerText
 				headerRow: currentRow
-				tasks: []
+				laps: []
 				shouldAddToStatusBar: shouldAddToStatusBar
 
 			editor.stopwatches.push stopwatch
@@ -66,24 +66,24 @@ module.exports = onChange = ( editor ) -> ->
 					currentRowRange = new Range [ currentRow, 0 ],
 						[ currentRow, currentRowText.length ]
 
-					taskMatch = currentRowText.match taskRegexp
+					lapMatch = currentRowText.match lapRegexp
 
-					if taskMatch or
+					if lapMatch or
 					( currentRowText is "  " ) or
 					( ( currentRowText is "" ) and isFirstLine )
 
-						task = createTask stopwatch, taskMatch, currentRow
-						stopwatch.tasks.push task
+						lap = createLap stopwatch, lapMatch, currentRow
+						stopwatch.laps.push lap
 
-						canonicalTaskText = taskToText task
-						if canonicalTaskText isnt currentRowText
-							editor.setTextInBufferRange currentRowRange, canonicalTaskText,
+						canonicalLapText = lapToText lap
+						if canonicalLapText isnt currentRowText
+							editor.setTextInBufferRange currentRowRange, canonicalLapText,
 								undo: "skip"
 
-						decorateTaskText task
+						decorateLapText lap
 
-						if task is getCurrentTask stopwatch
-							highlightTask task
+						if lap is getCurrentLap stopwatch
+							highlightLap lap
 
 					else
 						break
@@ -94,4 +94,4 @@ module.exports = onChange = ( editor ) -> ->
 				isFirstLine = no
 
 	updateStatusBar()
-	updateHighlightedTasks()
+	updateHighlightedLaps()
