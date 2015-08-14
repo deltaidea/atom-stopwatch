@@ -1,8 +1,8 @@
-module.exports = getEndingTime = ( plannerOrTask ) ->
-	if plannerOrTask.tasks
-		task = plannerOrTask.tasks[ plannerOrTask.tasks.length - 1 ]
+module.exports = getEndingTime = ( stopwatchOrTask ) ->
+	if stopwatchOrTask.tasks
+		task = stopwatchOrTask.tasks[ stopwatchOrTask.tasks.length - 1 ]
 	else
-		task = plannerOrTask
+		task = stopwatchOrTask
 	timeZoneOffset = +new Date 1970, 0, 1
 	result = new Date ( +task.startTime ) + ( +task.duration ) - timeZoneOffset
 	result.setDate 1

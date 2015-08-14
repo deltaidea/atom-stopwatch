@@ -5,12 +5,12 @@ highlightTask = require "./highlightTask"
 module.exports = updateHighlightedTasks = ->
 	editors = atom.workspace.getTextEditors()
 	for editor in editors
-		if not editor?.planners
+		if not editor?.stopwatches
 			continue
 
-		for planner in editor.planners
-			task = getCurrentTask planner
+		for stopwatch in editor.stopwatches
+			task = getCurrentTask stopwatch
 			if task
 				highlightTask task
 			else
-				cleanHighlight planner
+				cleanHighlight stopwatch

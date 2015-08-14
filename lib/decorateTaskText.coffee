@@ -18,6 +18,6 @@ module.exports = decorateTaskText = ( task ) ->
 
 	decoration = task.editor.decorateMarker partMarker,
 		type: "highlight"
-		class: "planner-task-text"
+		class: "stopwatch-task-text"
 
-	task.editor.plannerMarkers.push partMarker
+	task.editor.stopwatchMarkers.push partMarker

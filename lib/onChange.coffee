@@ -1,6 +1,6 @@
 { Range } = require "atom"
 createTask = require "./createTask"
-decoratePlannerHeader = require "./decoratePlannerHeader"
+decorateStopwatchHeader = require "./decorateStopwatchHeader"
 decorateTaskText = require "./decorateTaskText"
 getCurrentTask = require "./getCurrentTask"
 highlightTask = require "./highlightTask"
@@ -12,12 +12,12 @@ updateStatusBar = require "./updateStatusBar"
 taskRegexp = /^  \* (\d\d):(\d\d) (.*?)( (\d{1,2}) hours?)?( (\d{1,2}) minutes?)?$/i
 
 module.exports = onChange = ( editor ) -> ->
-	editor.planners = []
-	editor.plannerMarkers ?= []
+	editor.stopwatches = []
+	editor.stopwatchMarkers ?= []
 
-	for oldMarker in editor.plannerMarkers
+	for oldMarker in editor.stopwatchMarkers
 		oldMarker?.destroy?()
-	editor.plannerMarkers = []
+	editor.stopwatchMarkers = []
 
 	currentRow = 0
 	lastRowNumber = editor.getLastBufferRow()
@@ -26,12 +26,12 @@ module.exports = onChange = ( editor ) -> ->
 
 		headerText = editor.lineTextForBufferRow currentRow
 
-		if headerText.endsWith ".planner"
-			isHeaderLine = yes
-			shouldAddToStatusBar = yes
-		else if headerText.endsWith ".planner-no-status"
+		if headerText.endsWith ".stopwatch"
 			isHeaderLine = yes
 			shouldAddToStatusBar = no
+		else if headerText.endsWith ".stopwatch-with-status"
+			isHeaderLine = yes
+			shouldAddToStatusBar = yes
 
 		if not isHeaderLine
 			currentRow += 1
@@ -45,16 +45,16 @@ module.exports = onChange = ( editor ) -> ->
 				editor.setTextInBufferRange currentRowRange, headerText + "\n",
 					undo: "skip"
 
-			planner =
+			stopwatch =
 				editor: editor
 				title: headerText
 				headerRow: currentRow
 				tasks: []
 				shouldAddToStatusBar: shouldAddToStatusBar
 
-			editor.planners.push planner
+			editor.stopwatches.push stopwatch
 
-			decoratePlannerHeader planner
+			decorateStopwatchHeader stopwatch
 
 			currentRow += 1
 			isFirstLine = yes
@@ -72,8 +72,8 @@ module.exports = onChange = ( editor ) -> ->
 					( currentRowText is "  " ) or
 					( ( currentRowText is "" ) and isFirstLine )
 
-						task = createTask planner, taskMatch, currentRow
-						planner.tasks.push task
+						task = createTask stopwatch, taskMatch, currentRow
+						stopwatch.tasks.push task
 
 						canonicalTaskText = taskToText task
 						if canonicalTaskText isnt currentRowText
@@ -82,7 +82,7 @@ module.exports = onChange = ( editor ) -> ->
 
 						decorateTaskText task
 
-						if task is getCurrentTask planner
+						if task is getCurrentTask stopwatch
 							highlightTask task
 
 					else

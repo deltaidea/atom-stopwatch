@@ -9,14 +9,14 @@ updateStatusBar = ->
 	textList = []
 
 	for editor in editors
-		if not editor?.planners
+		if not editor?.stopwatches
 			continue
 
-		for planner in editor.planners
-			if not planner.shouldAddToStatusBar
+		for stopwatch in editor.stopwatches
+			if not stopwatch.shouldAddToStatusBar
 				continue
 
-			task = getCurrentTask planner
+			task = getCurrentTask stopwatch
 			if task
 				textList.push "#{task.text} - #{timeToText ( timeRemaining task ), yes}"
 
