@@ -7,6 +7,13 @@
   "engines": {
     "atom": "~1.0.0"
   },
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    }
+  },
   "author": {
     "name": "Nikita Litvin",
     "email": "deltaidea@derpy.ru",
