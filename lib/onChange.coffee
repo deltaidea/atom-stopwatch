@@ -1,5 +1,5 @@
-{ Range } = require "atom"
 createLap = require "./createLap"
+createStopwatch = require "./createStopwatch"
 decorateLapDuration = require "./decorateLapDuration"
 decorateStopwatchHeader = require "./decorateStopwatchHeader"
 getCurrentLap = require "./getCurrentLap"
@@ -20,60 +20,40 @@ module.exports = onChange = ( editor ) -> ->
 	lastRowNumber = editor.getLastBufferRow()
 
 	while currentRow <= lastRowNumber
+		stopwatch = createStopwatch editor, currentRow
 
-		headerText = editor.lineTextForBufferRow currentRow
-
-		if headerText.endsWith ".stopwatch"
-			isHeaderLine = yes
-			shouldAddToStatusBar = no
-		else if headerText.endsWith ".stopwatch-with-status"
-			isHeaderLine = yes
-			shouldAddToStatusBar = yes
-
-		if not isHeaderLine
+		if not stopwatch
 			currentRow += 1
-		else
-			# For the next iteration.
-			isHeaderLine = no
+			continue
 
-			if currentRow is lastRowNumber
-				currentRowRange = new Range [ currentRow, 0 ],
-					[ currentRow, headerText.length ]
-				editor.setTextInBufferRange currentRowRange, headerText + "\n",
-					undo: "skip"
+		editor.stopwatches.push stopwatch
 
-			stopwatch =
-				editor: editor
-				title: headerText
-				headerRow: currentRow
-				laps: []
-				shouldAddToStatusBar: shouldAddToStatusBar
+		if currentRow is lastRowNumber
+			currentRowRange = [[ currentRow, 0 ], [ currentRow, stopwatch.headerText.length ]]
+			editor.setTextInBufferRange currentRowRange, "#{stopwatch.headerText}\n", undo: "skip"
 
-			editor.stopwatches.push stopwatch
+		decorateStopwatchHeader stopwatch
 
-			decorateStopwatchHeader stopwatch
+		currentRow += 1
+		isFirstLine = yes
+
+		loop
+			currentRowText = editor.lineTextForBufferRow currentRow
+			currentRowRange = [[ currentRow, 0 ], [ currentRow, currentRowText.length ]]
+			lapMatch = parseLap currentRowText
+
+			if lapMatch or ( ( currentRowText is "" ) and isFirstLine )
+				lap = createLap stopwatch, lapMatch, currentRow
+				stopwatch.laps.push lap
+
+				canonicalLapText = lapToText lap
+				if canonicalLapText isnt currentRowText
+					editor.setTextInBufferRange currentRowRange, canonicalLapText, undo: "skip"
+
+				decorateLapDuration lap
+
+			else
+				break
 
 			currentRow += 1
-			isFirstLine = yes
-
-			loop
-				currentRowText = editor.lineTextForBufferRow currentRow
-				currentRowRange = new Range [ currentRow, 0 ], [ currentRow, currentRowText.length ]
-				lapMatch = parseLap currentRowText
-
-				if lapMatch or ( ( currentRowText is "" ) and isFirstLine )
-					lap = createLap stopwatch, lapMatch, currentRow
-					stopwatch.laps.push lap
-
-					canonicalLapText = lapToText lap
-					if canonicalLapText isnt currentRowText
-						editor.setTextInBufferRange currentRowRange, canonicalLapText,
-							undo: "skip"
-
-					decorateLapDuration lap
-
-				else
-					break
-
-				currentRow += 1
-				isFirstLine = no
+			isFirstLine = no
