@@ -34,6 +34,8 @@ module.exports = onChange = ( editor ) -> ->
 
 		loop
 			currentRowText = editor.lineTextForBufferRow currentRow
+			if not currentRowText?
+				break
 			currentRowRange = [[ currentRow, 0 ], [ currentRow, currentRowText.length ]]
 			lapMatch = parseLap currentRowText
 
