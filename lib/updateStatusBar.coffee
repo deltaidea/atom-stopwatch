@@ -16,13 +16,11 @@ updateStatusBar = ->
 			if not stopwatch.shouldAddToStatusBar
 				continue
 
-			total = timeToText getDuration stopwatch
-			currentLap = ""
-
 			lap = getCurrentLap stopwatch
 			if lap
-				currentLap = " (#{timeToText getDuration lap})"
-				textList.push "#{stopwatch.title} - #{total}#{currentLap}"
+				lapText = "#{timeToText getDuration lap}"
+				totalText = " (total: #{timeToText getDuration stopwatch})"
+				textList.push "#{stopwatch.title} - #{lapText}#{totalText}"
 
 		statusBarElement.textContent = textList.join ", "
 
