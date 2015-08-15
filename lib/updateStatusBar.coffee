@@ -20,7 +20,7 @@ updateStatusBar = ->
 			currentLap = ""
 
 			lap = getCurrentLap stopwatch
-			if lap and not ( stopwatch.laps.length is 1 )
+			if lap
 				currentLap = " (#{timeToText getDuration lap})"
 				textList.push "#{stopwatch.title} - #{total}#{currentLap}"
 
