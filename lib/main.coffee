@@ -7,6 +7,6 @@ module.exports = AtomStopwatch =
 		setInterval incrementAll, 1000
 
 		atom.workspace.observeTextEditors ( editor ) ->
-			editor.onDidStopChanging onChange editor
+			editor.onDidChange onChange editor
 
 	consumeStatusBar: addStatusBarTile
