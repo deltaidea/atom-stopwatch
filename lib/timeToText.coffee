@@ -3,16 +3,22 @@ module.exports = timeToText = ( time, readable = no ) ->
 		text = ""
 		hours = time.getHours()
 		minutes = time.getMinutes()
+		seconds = time.getSeconds()
 		if hours
 			text += " #{hours} hour"
-			if hours > 1
+			if hours isnt 1
 				text += "s"
 		if minutes
 			text += " #{minutes} minute"
-			if minutes > 1
+			if minutes isnt 1
 				text += "s"
-		text
+		if seconds or not text
+			text += " #{seconds} second"
+			if seconds isnt 1
+				text += "s"
+		text.slice 1
 	else
 		paddedHour = ( "00" + time.getHours() ).slice -2
 		paddedMinute = ( "00" + time.getMinutes() ).slice -2
-		"#{paddedHour}:#{paddedMinute}"
+		paddedSecond = ( "00" + time.getSeconds() ).slice -2
+		"#{paddedHour}:#{paddedMinute}:#{paddedSecond}"

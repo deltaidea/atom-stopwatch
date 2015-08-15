@@ -1,7 +1,7 @@
-isCurrentLap = require "./isCurrentLap"
-
 module.exports = getCurrentLap = ( stopwatch ) ->
-	for lap in stopwatch.laps
-		if isCurrentLap lap
-			return lap
-	return null
+	firstLap = stopwatch.laps[ 0 ]
+
+	if firstLap and not firstLap.text
+		firstLap
+	else
+		null

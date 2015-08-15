@@ -1,5 +1,5 @@
 getCurrentLap = require "./getCurrentLap"
-timeRemaining = require "./timeRemaining"
+getDuration = require "./getDuration"
 timeToText = require "./timeToText"
 
 statusBarElement = document.createElement "span"
@@ -16,11 +16,15 @@ updateStatusBar = ->
 			if not stopwatch.shouldAddToStatusBar
 				continue
 
-			lap = getCurrentLap stopwatch
-			if lap
-				textList.push "#{lap.text} - #{timeToText ( timeRemaining lap ), yes}"
+			total = timeToText getDuration stopwatch
+			currentLap = ""
 
-	statusBarElement.textContent = textList.join ", "
+			lap = getCurrentLap stopwatch
+			if lap and not ( stopwatch.laps.length is 1 )
+				currentLap = " (#{timeToText getDuration lap})"
+				textList.push "#{stopwatch.title} - #{total}#{currentLap}"
+
+		statusBarElement.textContent = textList.join ", "
 
 updateStatusBar.statusBarElement = statusBarElement
 module.exports = updateStatusBar

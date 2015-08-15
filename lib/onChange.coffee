@@ -1,15 +1,12 @@
 { Range } = require "atom"
 createLap = require "./createLap"
+decorateLapDuration = require "./decorateLapDuration"
 decorateStopwatchHeader = require "./decorateStopwatchHeader"
-decorateLapText = require "./decorateLapText"
 getCurrentLap = require "./getCurrentLap"
-highlightLap = require "./highlightLap"
+incrementDuration = require "./incrementDuration"
 lapToText = require "./lapToText"
-updateHighlightedLaps = require "./updateHighlightedLaps"
+parseLap = require "./parseLap"
 updateStatusBar = require "./updateStatusBar"
-
-# ["  * 21:02 foo 10 hours 30 minutes", "21", "02", "foo", " 10 hours", "10", " 30 minutes", "30"]
-lapRegexp = /^  \* (\d\d):(\d\d) (.*?)( (\d{1,2}) hours?)?( (\d{1,2}) minutes?)?$/i
 
 module.exports = onChange = ( editor ) -> ->
 	editor.stopwatches = []
@@ -60,38 +57,23 @@ module.exports = onChange = ( editor ) -> ->
 			isFirstLine = yes
 
 			loop
-				try
-					currentRowText = editor.lineTextForBufferRow currentRow
+				currentRowText = editor.lineTextForBufferRow currentRow
+				currentRowRange = new Range [ currentRow, 0 ], [ currentRow, currentRowText.length ]
+				lapMatch = parseLap currentRowText
 
-					currentRowRange = new Range [ currentRow, 0 ],
-						[ currentRow, currentRowText.length ]
+				if lapMatch or ( ( currentRowText is "" ) and isFirstLine )
+					lap = createLap stopwatch, lapMatch, currentRow
+					stopwatch.laps.push lap
 
-					lapMatch = currentRowText.match lapRegexp
+					canonicalLapText = lapToText lap
+					if canonicalLapText isnt currentRowText
+						editor.setTextInBufferRange currentRowRange, canonicalLapText,
+							undo: "skip"
 
-					if lapMatch or
-					( currentRowText is "  " ) or
-					( ( currentRowText is "" ) and isFirstLine )
+					decorateLapDuration lap
 
-						lap = createLap stopwatch, lapMatch, currentRow
-						stopwatch.laps.push lap
-
-						canonicalLapText = lapToText lap
-						if canonicalLapText isnt currentRowText
-							editor.setTextInBufferRange currentRowRange, canonicalLapText,
-								undo: "skip"
-
-						decorateLapText lap
-
-						if lap is getCurrentLap stopwatch
-							highlightLap lap
-
-					else
-						break
-				catch
+				else
 					break
 
 				currentRow += 1
 				isFirstLine = no
-
-	updateStatusBar()
-	updateHighlightedLaps()

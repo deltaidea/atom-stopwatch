@@ -1,14 +1,11 @@
 { Range } = require "atom"
 lapToText = require "./lapToText"
 
-module.exports = decorateLapText = ( lap ) ->
+module.exports = decorateLapDuration = ( lap ) ->
 	parts = lapToText lap, yes
 
-	startPosition = parts.prefix.length +
-		parts.startTime.length +
-		parts.startTimeDelimiter.length
-
-	endPosition = startPosition + parts.text.length
+	startPosition = parts.prefix.length
+	endPosition = startPosition + parts.duration.length
 
 	partRange = new Range [ lap.row, startPosition ], [ lap.row, endPosition ]
 
@@ -18,6 +15,6 @@ module.exports = decorateLapText = ( lap ) ->
 
 	decoration = lap.editor.decorateMarker partMarker,
 		type: "highlight"
-		class: "stopwatch-lap-text"
+		class: "stopwatch-lap-duration"
 
 	lap.editor.stopwatchMarkers.push partMarker
