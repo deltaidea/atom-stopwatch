@@ -1,4 +1,4 @@
-prefixDurationRegexp = /^\((\d{2,}):(\d\d):(\d\d)\)/
+prefixDurationRegexp = /^\((\d{2,}):(\d\d):(\d\d)\) /
 
 module.exports = createStopwatch = ( editor, headerRow ) ->
 	if not editor or not headerRow?

@@ -1,13 +1,21 @@
-{ Range } = require "atom"
+getCurrentLap = require "./getCurrentLap"
+headerToText = require "./headerToText"
 lapToText = require "./lapToText"
 
-module.exports = incrementDuration = ( lap, ms = 1000 ) ->
+module.exports = incrementDuration = ( stopwatch, ms = 1000 ) ->
+	lap = getCurrentLap stopwatch
+
+	if not lap
+		return
+
 	lap.duration = new Date +lap.duration + ms
 
-	lapRow = lap.stopwatch.row + 1
-	lapText = lap.editor.lineTextForBufferRow lapRow
-	lapRowRange = new Range [ lapRow, 0 ], [ lapRow, lapText.length ]
-	canonicalLapText = lapToText lap
+	lapText = lap.editor.lineTextForBufferRow lap.row
+	lapRowRange = [[ lap.row, 0 ], [ lap.row, lapText.length ]]
+	updatedLapText = lapToText lap
+	lap.editor.setTextInBufferRange lapRowRange, updatedLapText, undo: "skip"
 
-	lap.editor.setTextInBufferRange lapRowRange, canonicalLapText,
-		undo: "skip"
+	headerText = stopwatch.headerText
+	rowRange = [[ stopwatch.row, 0 ], [ stopwatch.row, headerText.length ]]
+	updatedHeaderText = headerToText stopwatch
+	stopwatch.editor.setTextInBufferRange rowRange, updatedHeaderText, undo: "skip"

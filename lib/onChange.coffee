@@ -2,11 +2,8 @@ createLap = require "./createLap"
 createStopwatch = require "./createStopwatch"
 decorateLapDuration = require "./decorateLapDuration"
 decorateStopwatchHeader = require "./decorateStopwatchHeader"
-getCurrentLap = require "./getCurrentLap"
-incrementDuration = require "./incrementDuration"
 lapToText = require "./lapToText"
 parseLap = require "./parseLap"
-updateStatusBar = require "./updateStatusBar"
 
 module.exports = onChange = ( editor ) -> ->
 	editor.stopwatches = []
