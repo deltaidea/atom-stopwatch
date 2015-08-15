@@ -1,6 +1,5 @@
 getCurrentLap = require "./getCurrentLap"
 incrementDuration = require "./incrementDuration"
-onChange = require "./onChange"
 updateStatusBar = require "./updateStatusBar"
 
 module.exports = incrementAll = ->
@@ -14,7 +13,5 @@ module.exports = incrementAll = ->
 			lap = getCurrentLap stopwatch
 			if lap
 				incrementDuration lap
-
-		onChange( editor )()
 
 	updateStatusBar()
