@@ -28,6 +28,6 @@ module.exports = createStopwatch = ( editor, headerRow ) ->
 	editor: editor
 	title: title
 	headerText: headerText
-	headerRow: headerRow
+	row: headerRow
 	laps: []
 	shouldAddToStatusBar: shouldAddToStatusBar

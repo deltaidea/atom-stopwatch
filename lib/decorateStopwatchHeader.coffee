@@ -1,5 +1,5 @@
 module.exports = decorateStopwatchHeader = ( stopwatch ) ->
-	headerMarker = stopwatch.editor.markBufferPosition [ stopwatch.headerRow, 0 ],
+	headerMarker = stopwatch.editor.markBufferPosition [ stopwatch.row, 0 ],
 		invalidate: "touch"
 		persistent: no
 
