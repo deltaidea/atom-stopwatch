@@ -29,8 +29,6 @@ module.exports = onChange = ( editor ) -> ->
 			currentRowRange = [[ currentRow, 0 ], [ currentRow, stopwatch.headerText.length ]]
 			editor.setTextInBufferRange currentRowRange, "#{stopwatch.headerText}\n", undo: "skip"
 
-		decorateStopwatchHeader stopwatch
-
 		currentRow += 1
 		isFirstLine = yes
 
@@ -54,3 +52,5 @@ module.exports = onChange = ( editor ) -> ->
 
 			currentRow += 1
 			isFirstLine = no
+
+		decorateStopwatchHeader stopwatch
