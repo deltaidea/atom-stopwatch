@@ -16,5 +16,6 @@ module.exports = incrementDuration = ( stopwatch ) ->
 	headerText = stopwatch.headerText
 	updatedHeaderText = headerToText stopwatch
 	if headerText isnt updatedHeaderText
+		stopwatch.headerText = updatedHeaderText
 		rowRange = [[ stopwatch.row, 0 ], [ stopwatch.row, headerText.length ]]
 		stopwatch.editor.setTextInBufferRange rowRange, updatedHeaderText, undo: "skip"
