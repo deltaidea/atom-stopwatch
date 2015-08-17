@@ -1,7 +1,6 @@
 module.exports = getCurrentLap = ( stopwatch ) ->
-	firstLap = stopwatch.laps[ 0 ]
+	for lap in stopwatch.laps
+		if not lap.text
+			return lap
 
-	if firstLap and not firstLap.text
-		firstLap
-	else
-		null
+	null

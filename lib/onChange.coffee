@@ -30,7 +30,7 @@ module.exports = onChange = ( editor ) -> ->
 			editor.setTextInBufferRange currentRowRange, "#{stopwatch.headerText}\n", undo: "skip"
 
 		currentRow += 1
-		isFirstLine = yes
+		didFindRunningLap = no
 
 		loop
 			currentRowText = editor.lineTextForBufferRow currentRow
@@ -39,9 +39,15 @@ module.exports = onChange = ( editor ) -> ->
 			currentRowRange = [[ currentRow, 0 ], [ currentRow, currentRowText.length ]]
 			lapMatch = parseLap currentRowText
 
-			if lapMatch or ( ( currentRowText is "" ) and isFirstLine )
+			if lapMatch or ( ( currentRowText is "  " ) and not didFindRunningLap )
+				if currentRowText is "  "
+					didFindRunningLap = yes
+
 				lap = createLap stopwatch, lapMatch, currentRow
 				stopwatch.laps.push lap
+
+				if not lap.text
+					didFindRunningLap = yes
 
 				canonicalLapText = lapToText lap
 				if canonicalLapText isnt currentRowText
@@ -53,6 +59,5 @@ module.exports = onChange = ( editor ) -> ->
 				break
 
 			currentRow += 1
-			isFirstLine = no
 
 		decorateStopwatchHeader stopwatch
