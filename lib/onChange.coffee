@@ -1,7 +1,7 @@
 createLap = require "./createLap"
 createStopwatch = require "./createStopwatch"
 decorateLapDuration = require "./decorateLapDuration"
-decorateStopwatchHeader = require "./decorateStopwatchHeader"
+decorateStopwatch = require "./decorateStopwatch"
 lapToText = require "./lapToText"
 parseLap = require "./parseLap"
 
@@ -60,4 +60,4 @@ module.exports = onChange = ( editor ) -> ->
 
 			currentRow += 1
 
-		decorateStopwatchHeader stopwatch
+		decorateStopwatch stopwatch
